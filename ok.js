@@ -20,9 +20,11 @@ app.get('/data/accessto',(req,res) => {
 
 app.post('/data/accessto',urlencodedParser,(req,res) => {
     if(!req.body) return res.send("400, Error");
-    if(req.body.pass = "noneedforpass") {
-        data.push(req.body.msg)
-    }
+    if(req.body.pass == "idkdood123321") {
+        data1.push(req.body.msg);
+        console.log(req.body.msg);  
+        res.render("user");
+    } else return res.render("usercopy");
 })
 
 app.listen('3000');
