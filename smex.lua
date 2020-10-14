@@ -391,7 +391,7 @@ name.BackgroundTransparency = 1.000
 name.Size = UDim2.new(1, 0, 1, 0)
 name.ZIndex = 100
 name.Font = Enum.Font.Gotham
-name.Text = "Spotify"
+name.Text = "Spotify [KROW VERSION]"
 name.TextColor3 = Color3.fromRGB(0, 0, 0)
 name.TextSize = 14.000
 
@@ -809,6 +809,7 @@ local function YKZJVV_fake_script() -- volumeslider.LocalScript
             end
         end
     )
+    cfgValue.Value = 50
 
     local s, event =
         pcall(
