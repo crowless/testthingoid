@@ -528,7 +528,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
         Minutes = Minutes - Hours * 60
         return Format(Minutes) .. ":" .. Format(Seconds)
     end
-    local spotify = function(url, method, token)
+    local spotify = function(url, method, _G.TOKEN)
         local success, res =
             pcall(
             syn.request,
@@ -537,7 +537,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                 Method = method,
                 Headers = {
                     ["Accept"] = "application/json",
-                    ["Authorization"] = "Bearer " .. token,
+                    ["Authorization"] = "Bearer " .. _G.TOKEN,
                     ["Content-Type"] = "application/json"
                 }
             }
@@ -597,22 +597,22 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
 
     Background.back.buttons.skip.MouseButton1Click:Connect(
         function()
-            pcall(spotify, "https://api.spotify.com/v1/me/player/next", "POST", token)
+            pcall(spotify, "https://api.spotify.com/v1/me/player/next", "POST", _G.TOKEN)
         end
     )
 
     Background.back.buttons.previous.MouseButton1Click:Connect(
         function()
-            pcall(spotify, "https://api.spotify.com/v1/me/player/previous", "POST", token)
+            pcall(spotify, "https://api.spotify.com/v1/me/player/previous", "POST", _G.TOKEN)
         end
     )
 
     Background.back.buttons.pauseresume.MouseButton1Click:Connect(
         function()
             if Background.back.buttons.pauseresume.Image == "rbxassetid://4458862490" then
-                pcall(spotify, "https://api.spotify.com/v1/me/player/pause", "PUT", token)
+                pcall(spotify, "https://api.spotify.com/v1/me/player/pause", "PUT", _G.TOKEN)
             else
-                pcall(spotify, "https://api.spotify.com/v1/me/player/play", "PUT", token)
+                pcall(spotify, "https://api.spotify.com/v1/me/player/play", "PUT", _G.TOKEN)
             end
         end
     )
@@ -633,14 +633,14 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
             if not string.find(tostring(z), "MouseButton1") then
                 if z == pause then
                     if Background.back.buttons.pauseresume.Image == "rbxassetid://4458862490" then
-                        pcall(spotify, "https://api.spotify.com/v1/me/player/pause", "PUT", token)
+                        pcall(spotify, "https://api.spotify.com/v1/me/player/pause", "PUT", _G.TOKEN)
                     else
-                        pcall(spotify, "https://api.spotify.com/v1/me/player/play", "PUT", token)
+                        pcall(spotify, "https://api.spotify.com/v1/me/player/play", "PUT", _G.TOKEN)
                     end
                 elseif z == skip then
-                    pcall(spotify, "https://api.spotify.com/v1/me/player/next", "POST", token)
+                    pcall(spotify, "https://api.spotify.com/v1/me/player/next", "POST", _G.TOKEN)
                 elseif z == previous then
-                    pcall(spotify, "https://api.spotify.com/v1/me/player/previous", "POST", token)
+                    pcall(spotify, "https://api.spotify.com/v1/me/player/previous", "POST", _G.TOKEN)
                 end
                 if keybindchange then
                     keybindchange = false
@@ -705,9 +705,9 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     while wait(0.25) do
         pcall(
             function()
-                if token ~= "" then
+                if _G.TOKEN ~= "" then
                     local comply2, returns =
-                        pcall(spotify, "https://api.spotify.com/v1/me/player/currently-playing", "GET", token)
+                        pcall(spotify, "https://api.spotify.com/v1/me/player/currently-playing", "GET", _G.TOKEN)
                     if comply2 then
                         local currentsec = math.floor(returns.current / 1000)
                         local maximumsec = math.floor(returns.maximum / 1000)
@@ -741,7 +741,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                             "https://api.spotify.com/v1/me/player/volume?volume_percent=" ..
                                 tostring(Background.back.volumeslider.volume.Value),
                             "PUT",
-                            token
+                            _G.TOKEN
                         )
                     else
                         Background.back.playing.Text = "   NULL"
