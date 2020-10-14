@@ -1,5 +1,4 @@
 local Spotify = Instance.new("ScreenGui")
-local token = "BQBLUkpC_g4Hi5VJ5qG7_QJcbKr28Qm7ccvGaO1CUVt4wYk-KinIVgfnBmYplUvxJcypsX_Fv7A8a1JQos72ytCMR_Hu-JeAEV6hLtA99cCVJmH4gw2exnzUP6PwziL0-rXvUJvYzfRanjRce02OHliMGpajJIBOF0CNgWoGbe_t"
 local RequestToken = Instance.new("Frame")
 local continuebutton = Instance.new("TextButton")
 local tokentext = Instance.new("TextBox")
