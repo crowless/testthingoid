@@ -528,7 +528,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
         Minutes = Minutes - Hours * 60
         return Format(Minutes) .. ":" .. Format(Seconds)
     end
-    local spotify = function(url, method, _G.TOKEN)
+    local spotify = function(url, method, token)
         local success, res =
             pcall(
             syn.request,
@@ -537,7 +537,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                 Method = method,
                 Headers = {
                     ["Accept"] = "application/json",
-                    ["Authorization"] = "Bearer " .. _G.TOKEN,
+                    ["Authorization"] = "Bearer " .. token,
                     ["Content-Type"] = "application/json"
                 }
             }
