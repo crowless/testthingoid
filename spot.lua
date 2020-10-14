@@ -37,7 +37,6 @@ local name = Instance.new("TextLabel")
 local togglebutton = Instance.new("ImageButton")
 local Features_2 = Instance.new("Frame")
 local UIListLayout_2 = Instance.new("UIListLayout")
-local resettoken = Instance.new("TextButton")
 local keybinds = Instance.new("TextButton")
 local error = Instance.new("TextLabel")
 
@@ -414,16 +413,6 @@ UIListLayout_2.Parent = Features_2
 UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout_2.Padding = UDim.new(0, 5)
 
-resettoken.Name = "resettoken"
-resettoken.Parent = Features_2
-resettoken.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-resettoken.BorderSizePixel = 0
-resettoken.Size = UDim2.new(1, 0, 0, 30)
-resettoken.Font = Enum.Font.Gotham
-resettoken.Text = "Reset Token"
-resettoken.TextColor3 = Color3.fromRGB(255, 255, 255)
-resettoken.TextSize = 14.000
-
 keybinds.Name = "keybinds"
 keybinds.Parent = Features_2
 keybinds.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -568,20 +557,6 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
 
     Background.Visible = false
     script.Parent.Keybinds.Visible = false
-
-    Background.Features.resettoken.MouseButton1Click:Connect(
-        function()
-            Background.Visible = false
-            script.Parent.RequestToken.Visible = true
-            Spotify.error.Visible = false
-            script.Parent.RequestToken.tokentext.Text = ""
-            Background.back.playing.Text = "   NULL"
-            Background.back.artist.Text = "   NULL"
-            Background.back.time.Text = "   NULL"
-            Background.back.time2.Text = "NULL   "
-            Background.back.progressbar.progresssize.Size = UDim2.new(0, 0, 1, 0)
-        end
-    )
 
     Background.Features.keybinds.MouseButton1Click:Connect(
         function()
