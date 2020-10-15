@@ -39,39 +39,39 @@ local Features_2 = Instance.new("Frame")
 local UIListLayout_2 = Instance.new("UIListLayout")
 local keybinds = Instance.new("TextButton")
 local error = Instance.new("TextLabel")
-local config
 --Properties:
 local function readyFile() 
-  if isfile('Spotify-Config.txt') then
-    local a = readfile('Spotify-Config.txt')
-    local config = game.HttpService:JSONDecode(a)
-    for i,v in next,config do
-      print(i..' : '..v)
-    end
-  else
+  if not isfile('Spotify-Config.txt') then
     local b = { k1 = '', k2 = '', k3 = '' }
     local a = game.HttpService:JSONEncode(b)
     writefile('Spotify-Config.txt',a)
   end
 end
 
-readyFile()
+local function getConfig()
+  if isfile('Spotify-Config.txt') then
+    local config = readfile('Spotify-Config.txt')
+    local a = game.HttpService:JSONDecode(config)
+    return a
+  end
+end
 
-local function updateFile()
-  local a = game.HttpService:JSONEncode(config)
+local function updateFile(b)
+  local a = game.HttpService:JSONEncode(b)
   writefile('Spotify-Config.txt',a)
 end
 
 local function saveKey(num,key)
+  local config = getConfig()
   if num == 1 then
     config.k1 = key
-    updateFile()
+    updateFile(config)
   elseif num == 2 then
     config.k2 = key
-    updateFile()
+    updateFile(config)
   else
     config.k3 = key
-    updateFile()
+    updateFile(config)
   end
 end
 Spotify.Name = "Spotify"
@@ -192,7 +192,7 @@ keybindbutton.BorderSizePixel = 0
 keybindbutton.Position = UDim2.new(0.555502176, 0, 0, 0)
 keybindbutton.Size = UDim2.new(0.444497794, 0, -0.200000003, 30)
 keybindbutton.Font = Enum.Font.Gotham
-keybindbutton.Text = config.k1
+keybindbutton.Text = getConfig().k1
 keybindbutton.TextColor3 = Color3.fromRGB(255, 255, 255)
 keybindbutton.TextSize = 10.000
 
@@ -216,7 +216,7 @@ keybindbutton_2.BorderSizePixel = 0
 keybindbutton_2.Position = UDim2.new(0.555502176, 0, 0, 0)
 keybindbutton_2.Size = UDim2.new(0.444497794, 0, -0.200000003, 30)
 keybindbutton_2.Font = Enum.Font.Gotham
-keybindbutton_2.Text = config.k2
+keybindbutton_2.Text = getConfig().k2
 keybindbutton_2.TextColor3 = Color3.fromRGB(255, 255, 255)
 keybindbutton_2.TextSize = 10.000
 
@@ -240,7 +240,7 @@ keybindbutton_3.BorderSizePixel = 0
 keybindbutton_3.Position = UDim2.new(0.555502176, 0, 0, 0)
 keybindbutton_3.Size = UDim2.new(0.444497794, 0, -0.200000003, 30)
 keybindbutton_3.Font = Enum.Font.Gotham
-keybindbutton_3.Text = config.k3
+keybindbutton_3.Text = getConfig().k3
 keybindbutton_3.TextColor3 = Color3.fromRGB(255, 255, 255)
 keybindbutton_3.TextSize = 10.000
 
@@ -627,9 +627,9 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     local keybindchange = false
     local keybindchange2 = false
     local keybindchange3 = false
-    local pause
-    local skip
-    local previous
+    local pause = Enum.KeyCode[getConfig().k1]
+    local skip = Enum.KeyCode[getConfig().k2]
+    local previous = Enum.KeyCode[getConfig().k3]
     local UserInputService = game:GetService("UserInputService")
     UserInputService.InputBegan:connect(
         function(key, processed)
@@ -654,8 +654,8 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                     pause = z
                     local textcool = string.find(tostring(z), "UserInputType") and 20 or 14
                     script.Parent.Keybinds.Features.pauseresume.keybindbutton.Text = string.sub(tostring(z), textcool)
+                    print('SAVING: '..string.sub(tostring(z), textcool)..' TO KEY 1')
                     saveKey(1,string.sub(tostring(z), textcool))
-                    print('SAVED: '..string.sub(tostring(z), textcool))
                     if key.KeyCode == Enum.KeyCode.Backspace then
                         pause = nil
                         script.Parent.Keybinds.Features.pauseresume.keybindbutton.Text = ""
@@ -666,8 +666,8 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                     skip = z
                     local textcool = string.find(tostring(z), "UserInputType") and 20 or 14
                     script.Parent.Keybinds.Features.skip.keybindbutton.Text = string.sub(tostring(z), textcool)
+                    print('SAVING: '..string.sub(tostring(z), textcool)..' TO KEY 2')
                     saveKey(2,string.sub(tostring(z), textcool))
-                    print('SAVED: '..string.sub(tostring(z), textcool))
                     if key.KeyCode == Enum.KeyCode.Backspace then
                         skip = nil
                         script.Parent.Keybinds.Features.skip.keybindbutton.Text = ""
@@ -678,8 +678,8 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                     previous = z
                     local textcool = string.find(tostring(z), "UserInputType") and 20 or 14
                     script.Parent.Keybinds.Features.previous.keybindbutton.Text = string.sub(tostring(z), textcool)
+                    print('SAVING: '..string.sub(tostring(z), textcool)..' TO KEY 3')
                     saveKey(3,string.sub(tostring(z), textcool))
-                    print('SAVED: '..string.sub(tostring(z), textcool))
                     if key.KeyCode == Enum.KeyCode.Backspace then
                         previous = nil
                         script.Parent.Keybinds.Features.previous.keybindbutton.Text = ""
@@ -715,6 +715,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     Background.back.time.Text = "   NULL"
     Background.back.time2.Text = "NULL   "
     Background.back.progressbar.progresssize.Size = UDim2.new(0, 0, 1, 0)
+    readyFile()
     while wait(0.25) do
         pcall(
             function()
