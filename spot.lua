@@ -499,7 +499,19 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
         end
       end
     end)
-
+    local on = true
+    game:GetService('UserInputService').InputBegan:Connect(function(input, p)
+        if p then return end
+        if input.KeyCode == Enum.KeyCode.RightShift then
+          if on == true then
+            on = false
+            Spotify.Enabled = false
+          else
+            on = true
+            Spotify.Enabled = true
+          end
+        end
+    end)
     local TweenService = game:GetService("TweenService")
     local UserInputService = game:GetService("UserInputService")
 
