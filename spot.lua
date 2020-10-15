@@ -45,6 +45,9 @@ local function readyFile()
   if isfile('Spotify-Config.txt') then
     local a = readfile('Spotify-Config.txt')
     local config = game.HttpService:JSONDecode(a)
+    for i,v in next,config do
+      print(i..' : '..v)
+    end
   else
     local b = { k1 = '', k2 = '', k3 = '' }
     local a = game.HttpService:JSONEncode(b)
