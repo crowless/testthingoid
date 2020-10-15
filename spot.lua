@@ -1,7 +1,6 @@
 repeat wait() until game.Players.LocalPlayer~=nil
 
 local Spotify = Instance.new("ScreenGui")
-local RequestToken = Instance.new("Frame")
 local continuebutton = Instance.new("TextButton")
 local tokentext = Instance.new("TextBox")
 local Top = Instance.new("Frame")
@@ -64,6 +63,25 @@ local function updateFile(b)
   writefile('Spotify-Config.txt',a)
 end
 
+local function refreshToken()
+  local a = syn.request({
+    Url = 'https://roblox-spotify.herokuapp.com/refreshToken?refreshToken='.._G.REFRESHTOKEN,
+    Method = 'GET'
+  })
+  print('WAITING')
+  repeat wait() until a~=nil
+  print('PASSED')
+  print('TOKEN IS SET TO: '..a.Body)
+  _G.TOKEN = a.Body
+  Background.Visible = true
+  Spotify.error.Visible = true
+  Background.back.playing.Text = "   NULL"
+  Background.back.artist.Text = "   NULL"
+  Background.back.time.Text = "   NULL"
+  Background.back.time2.Text = "NULL   "
+  Background.back.progressbar.progresssize.Size = UDim2.new(0,0,1,0)
+end
+
 local function saveKey(num,key)
   local config = getConfig()
   if num == 1 then
@@ -90,45 +108,6 @@ local function savePos(pos)
 end
 Spotify.Name = "Spotify"
 Spotify.Parent = game.CoreGui
-
-RequestToken.Name = "RequestToken"
-RequestToken.Parent = Spotify
-RequestToken.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
-RequestToken.BorderSizePixel = 0
-RequestToken.Position = UDim2.new(0.5, -210, 0.5, -103)
-RequestToken.Size = UDim2.new(0, 420, 0, 206)
-
-continuebutton.Name = "continuebutton"
-continuebutton.Parent = RequestToken
-continuebutton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-continuebutton.BorderSizePixel = 0
-continuebutton.Position = UDim2.new(0, 25, 1, -35)
-continuebutton.Size = UDim2.new(0.880952358, 0, 0.146341458, 0)
-continuebutton.Font = Enum.Font.Gotham
-continuebutton.Text = "Continue"
-continuebutton.TextColor3 = Color3.fromRGB(255, 255, 255)
-continuebutton.TextSize = 14.000
-
-tokentext.Name = "tokentext"
-tokentext.Parent = RequestToken
-tokentext.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-tokentext.BorderSizePixel = 0
-tokentext.ClipsDescendants = true
-tokentext.Position = UDim2.new(0, 25, 0, 5)
-tokentext.Size = UDim2.new(0.880952358, 0, 0.780487776, 0)
-tokentext.Font = Enum.Font.Gotham
-tokentext.PlaceholderText = "Token"
-tokentext.Text = ""
-tokentext.TextColor3 = Color3.fromRGB(255, 255, 255)
-tokentext.TextSize = 14.000
-tokentext.TextWrapped = true
-
-Top.Name = "Top"
-Top.Parent = RequestToken
-Top.BackgroundColor3 = Color3.fromRGB(30, 215, 96)
-Top.BorderSizePixel = 0
-Top.Position = UDim2.new(0, 0, 0, -25)
-Top.Size = UDim2.new(1, 0, 0, 25)
 
 tokenname.Name = "tokenname"
 tokenname.Parent = Top
@@ -503,6 +482,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     game:GetService('UserInputService').InputBegan:Connect(function(input, p)
         if p then return end
         if input.KeyCode == Enum.KeyCode.RightShift then
+          print(_G.TOKEN)
           if on == true then
             on = false
             Spotify.Enabled = false
@@ -621,7 +601,6 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     local Spotify = script.Parent.Spotify
     local Background = script.Parent.Spotify.Background
     draggable(Spotify)
-    draggable(script.Parent.RequestToken)
     draggable(script.Parent.Keybinds)
 
     Background.Visible = false
@@ -762,9 +741,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
         end
     )
     Background.Visible = true
-    script.Parent.RequestToken.Visible = false
     Spotify.error.Visible = true
-    script.Parent.RequestToken.tokentext.Text = ""
     Background.back.playing.Text = "   NULL"
     Background.back.artist.Text = "   NULL"
     Background.back.time.Text = "   NULL"
@@ -774,11 +751,15 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
         pcall(
             function()
                 if _G.TOKEN ~= "" then
+                  print('sexxy')
                     local comply2, returns =
                         pcall(spotify, "https://api.spotify.com/v1/me/player/currently-playing", "GET", _G.TOKEN)
                     if comply2 then
                         local currentsec = math.floor(returns.current / 1000)
                         local maximumsec = math.floor(returns.maximum / 1000)
+                        if returns==nil then print('ITS FUCKING NIL') end
+                        print(game.HttpService:JSONEncode(returns))
+                        print('sexxy back')
                         Background.back.playing.Text = "   " .. returns.title
                         Background.back.artist.Text = "   " .. returns.artist
                         Background.back.time.Text = "   " .. convertToHMS(currentsec)
@@ -829,16 +810,9 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                             Enum.EasingStyle.Sine,
                             1
                         )
-                        Spotify.error.Text = "Error: The Spotify API returned an error, please reset your token."
+                        Spotify.error.Text = "Error: The Spotify API returned an error, refreshing token."
+                        refreshToken()
                     end
-                elseif not script.Parent.RequestToken.Visible then
-                    Spotify.error:TweenPosition(
-                        UDim2.new(0, 0, 1, -25),
-                        Enum.EasingDirection.In,
-                        Enum.EasingStyle.Sine,
-                        1
-                    )
-                    Spotify.error.Text = "Error: The Spotify API returned an error, please reset your token."
                 end
             end
         )
