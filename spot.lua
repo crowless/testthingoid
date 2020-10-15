@@ -48,6 +48,7 @@ local function readyFile()
   end
 end
 
+readyFile()
 local function getConfig()
   if isfile('Spotify-Config.txt') then
     local config = readfile('Spotify-Config.txt')
@@ -715,7 +716,6 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     Background.back.time.Text = "   NULL"
     Background.back.time2.Text = "NULL   "
     Background.back.progressbar.progresssize.Size = UDim2.new(0, 0, 1, 0)
-    readyFile()
     while wait(0.25) do
         pcall(
             function()
