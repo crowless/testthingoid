@@ -1,3 +1,5 @@
+repeat wait() until game.Players.LocalPlayer~=nil
+
 local Spotify = Instance.new("ScreenGui")
 local RequestToken = Instance.new("Frame")
 local continuebutton = Instance.new("TextButton")
@@ -821,7 +823,6 @@ local function YKZJVV_fake_script() -- volumeslider.LocalScript
 
     local scrollon = false
     local UserInputService = game:GetService("UserInputService")
-
     local mouse = game:GetService("Players").LocalPlayer:GetMouse()
     local heartbeat = game:GetService("RunService").Heartbeat
 
