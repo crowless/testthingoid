@@ -44,7 +44,7 @@ local error = Instance.new("TextLabel")
 --Properties:
 local function readyFile() 
   if not isfile('Spotify-Config.txt') then
-    local b = { k1 = 'NOT SET', k2 = 'NOT SET', k3 = 'NOT SET' }
+    local b = { k1 = 'NOT SET', k2 = 'NOT SET', k3 = 'NOT SET', posX = 0, posY = 0}
     local a = game.HttpService:JSONEncode(b)
     writefile('Spotify-Config.txt',a)
   end
@@ -76,6 +76,17 @@ local function saveKey(num,key)
     config.k3 = key
     updateFile(config)
   end
+end
+
+local function savePos(pos)
+    local x = pos.X.Offset
+    local y = pos.Y.Offset
+
+    local a = getConfig()
+    a.posX = x
+    a.posY = y
+
+    updateFile(a)
 end
 Spotify.Name = "Spotify"
 Spotify.Parent = game.CoreGui
@@ -252,7 +263,7 @@ Spotify_2.Parent = Spotify
 Spotify_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Spotify_2.BackgroundTransparency = 1.000
 Spotify_2.ClipsDescendants = true
-Spotify_2.Position = UDim2.new(0.0335917324, 0, 0.0528255515, 0)
+Spotify_2.Position = UDim2.new(0.0335917324, getConfig().posX, 0.0528255515, getConfig().posY)
 Spotify_2.Size = UDim2.new(0, 306, 0, 300)
 
 Background.Name = "Background"
@@ -477,6 +488,17 @@ error.TextWrapped = true
 
 local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     local script = Instance.new("LocalScript", Spotify)
+
+    local lastPos = UDim2.new()
+
+    spawn(function() 
+      while wait(.2) do
+        if Spotify_2.Position ~= lastPos then
+          lastPos = Spotify_2.Position
+          savePos(Spotify_2.Position)
+        end
+      end
+    end)
 
     local TweenService = game:GetService("TweenService")
     local UserInputService = game:GetService("UserInputService")
