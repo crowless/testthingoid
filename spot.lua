@@ -749,14 +749,14 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
         print('ITS : "'..getConfig().k1..'"')
     end
     if getConfig().vup ~= 'NOT SET' then
-        vup = Enum.KeyCode[getConfig().vup]
-        print(previous)
+        volup = Enum.KeyCode[getConfig().vup]
+        print(vup)
       else
         print('ITS : "'..getConfig().vup..'"')
     end
     if getConfig().vdown ~= 'NOT SET' then
-        vdown = Enum.KeyCode[getConfig().vdown]
-        print(previous)
+        voldown = Enum.KeyCode[getConfig().vdown]
+        print(vdown)
       else
         print('ITS : "'..getConfig().vdown..'"')
     end
@@ -779,9 +779,11 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                 elseif z == previous then
                     pcall(spotify, "https://api.spotify.com/v1/me/player/previous", "POST", _G.TOKEN)
                 elseif z == volup then
-                    script.Parent.Spotify.Background.back.volumeslider.volume.Value = script.Parent.Spotify.Background.back.volumeslider.volume.Value + 5
+                    print('sex')
+                    script.Parent.Spotify.Background.back.volumeslider:WaitForChild('volume').Value = script.Parent.Spotify.Background.back.volumeslider:WaitForChild('volume').Value + 5
                 elseif z == voldown then
-                    script.Parent.Spotify.Background.back.volumeslider.volume.Value = script.Parent.Spotify.Background.back.volumeslider.volume.Value - 5
+                    print('sex2')
+                    script.Parent.Spotify.Background.back.volumeslider:WaitForChild('volume').Value = script.Parent.Spotify.Background.back.volumeslider:WaitForChild('volume').Value - 5
                 end
                 if keybindchange then
                     keybindchange = false
