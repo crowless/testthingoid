@@ -13,10 +13,14 @@ local Features = Instance.new("Frame")
 local UIListLayout = Instance.new("UIListLayout")
 local pauseresume = Instance.new("TextLabel")
 local keybindbutton = Instance.new("TextButton")
+local volumeup = Instance.new("TextLabel")
+local volumedown = Instance.new("TextLabel")
 local skip = Instance.new("TextLabel")
 local keybindbutton_2 = Instance.new("TextButton")
 local previous = Instance.new("TextLabel")
 local keybindbutton_3 = Instance.new("TextButton")
+local keybindbutton_4 = Instance.new("TextButton")
+local keybindbutton_5 = Instance.new("TextButton")
 local Spotify_2 = Instance.new("Frame")
 local Background = Instance.new("Frame")
 local back = Instance.new("Frame")
@@ -43,7 +47,7 @@ local error = Instance.new("TextLabel")
 --Properties:
 local function readyFile() 
   if not isfile('Spotify-Config.txt') then
-    local b = { k1 = 'NOT SET', k2 = 'NOT SET', k3 = 'NOT SET', posX = 0, posY = 0}
+    local b = { k1 = 'NOT SET', k2 = 'NOT SET', k3 = 'NOT SET', vup = 'NOT SET', vdown = 'NOT SET', posX = 0, posY = 0, token = _G.TOKEN}
     local a = game.HttpService:JSONEncode(b)
     writefile('Spotify-Config.txt',a)
   end
@@ -55,6 +59,15 @@ local function getConfig()
     local config = readfile('Spotify-Config.txt')
     local a = game.HttpService:JSONDecode(config)
     return a
+  end
+end
+
+local function updateToken()
+  if isfile('Spotify-Config.txt') then
+    local config = getConfig()
+    config.token = _G.TOKEN
+    local a = game.HttpService:JSONEncode(config)
+    writefile('Spotify-Config.txt',a)
   end
 end
 
@@ -80,6 +93,7 @@ local function refreshToken()
   Background.back.time.Text = "   NULL"
   Background.back.time2.Text = "NULL   "
   Background.back.progressbar.progresssize.Size = UDim2.new(0,0,1,0)
+  updateToken()
 end
 
 local function saveKey(num,key)
@@ -90,8 +104,14 @@ local function saveKey(num,key)
   elseif num == 2 then
     config.k2 = key
     updateFile(config)
-  else
+  elseif num == 3 then
     config.k3 = key
+    updateFile(config)
+  elseif num == 4 then
+    config.vup = key
+    updateFile(config)
+  elseif num == 5 then
+    config.vdown = key
     updateFile(config)
   end
 end
@@ -124,7 +144,7 @@ Keybinds.Parent = Spotify
 Keybinds.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
 Keybinds.BorderSizePixel = 0
 Keybinds.Position = UDim2.new(0.5, -130, 0.5, -82)
-Keybinds.Size = UDim2.new(0, 260, 0, 164)
+Keybinds.Size = UDim2.new(0, 260, 0, 200)
 
 continuebutton_2.Name = "continuebutton"
 continuebutton_2.Parent = Keybinds
@@ -178,6 +198,32 @@ pauseresume.TextSize = 14.000
 pauseresume.TextWrapped = true
 pauseresume.TextXAlignment = Enum.TextXAlignment.Left
 
+volumeup.Name = "volumeup"
+volumeup.Parent = Features
+volumeup.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+volumeup.BackgroundTransparency = 1.000
+volumeup.ClipsDescendants = true
+volumeup.Size = UDim2.new(1, 0, 0, 25)
+volumeup.Font = Enum.Font.Gotham
+volumeup.Text = "Volume up"
+volumeup.TextColor3 = Color3.fromRGB(255, 255, 255)
+volumeup.TextSize = 14.000
+volumeup.TextWrapped = true
+volumeup.TextXAlignment = Enum.TextXAlignment.Left
+
+volumedown.Name = "volumedown"
+volumedown.Parent = Features
+volumedown.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+volumedown.BackgroundTransparency = 1.000
+volumedown.ClipsDescendants = true
+volumedown.Size = UDim2.new(1, 0, 0, 25)
+volumedown.Font = Enum.Font.Gotham
+volumedown.Text = "Volume down"
+volumedown.TextColor3 = Color3.fromRGB(255, 255, 255)
+volumedown.TextSize = 14.000
+volumedown.TextWrapped = true
+volumedown.TextXAlignment = Enum.TextXAlignment.Left
+
 keybindbutton.Name = "keybindbutton"
 keybindbutton.Parent = pauseresume
 keybindbutton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -188,6 +234,28 @@ keybindbutton.Font = Enum.Font.Gotham
 keybindbutton.Text = getConfig().k1
 keybindbutton.TextColor3 = Color3.fromRGB(255, 255, 255)
 keybindbutton.TextSize = 10.000
+
+keybindbutton_4.Name = "keybindbutton"
+keybindbutton_4.Parent = volumeup
+keybindbutton_4.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+keybindbutton_4.BorderSizePixel = 0
+keybindbutton_4.Position = UDim2.new(0.555502176, 0, 0, 0)
+keybindbutton_4.Size = UDim2.new(0.444497794, 0, -0.200000003, 30)
+keybindbutton_4.Font = Enum.Font.Gotham
+keybindbutton_4.Text = getConfig().vup
+keybindbutton_4.TextColor3 = Color3.fromRGB(255, 255, 255)
+keybindbutton_4.TextSize = 10.000
+
+keybindbutton_5.Name = "keybindbutton"
+keybindbutton_5.Parent = volumedown
+keybindbutton_5.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+keybindbutton_5.BorderSizePixel = 0
+keybindbutton_5.Position = UDim2.new(0.555502176, 0, 0, 0)
+keybindbutton_5.Size = UDim2.new(0.444497794, 0, -0.200000003, 30)
+keybindbutton_5.Font = Enum.Font.Gotham
+keybindbutton_5.Text = getConfig().vdown
+keybindbutton_5.TextColor3 = Color3.fromRGB(255, 255, 255)
+keybindbutton_5.TextSize = 10.000
 
 skip.Name = "skip"
 skip.Parent = Features
@@ -478,6 +546,8 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
         end
       end
     end)
+
+    _G.TOKEN = getConfig().token
     local on = true
     game:GetService('UserInputService').InputBegan:Connect(function(input, p)
         if p then return end
@@ -643,9 +713,13 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     local keybindchange = false
     local keybindchange2 = false
     local keybindchange3 = false
+    local keybindchange4 = false
+    local keybindchange5 = false
     local pause
     local skip
     local previous
+    local volup
+    local voldown
     if getConfig().k1 ~= 'NOT SET' then
         pause = Enum.KeyCode[getConfig().k1]
         print(pause)
@@ -663,6 +737,18 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
         print(previous)
       else
         print('ITS : "'..getConfig().k1..'"')
+    end
+    if getConfig().vup ~= 'NOT SET' then
+        vup = Enum.KeyCode[getConfig().vup]
+        print(previous)
+      else
+        print('ITS : "'..getConfig().vup..'"')
+    end
+    if getConfig().vdown ~= 'NOT SET' then
+        vdown = Enum.KeyCode[getConfig().vdown]
+        print(previous)
+      else
+        print('ITS : "'..getConfig().vdown..'"')
     end
     local UserInputService = game:GetService("UserInputService")
     UserInputService.InputBegan:connect(
@@ -682,6 +768,10 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                     pcall(spotify, "https://api.spotify.com/v1/me/player/next", "POST", _G.TOKEN)
                 elseif z == previous then
                     pcall(spotify, "https://api.spotify.com/v1/me/player/previous", "POST", _G.TOKEN)
+                elseif z == volup then
+                    script.Parent.Spotify.Background.back.volumeslider.volume.Value = script.Parent.Spotify.Background.back.volumeslider.volume.Value + 5
+                elseif z == voldown then
+                    script.Parent.Spotify.Background.back.volumeslider.volume.Value = script.Parent.Spotify.Background.back.volumeslider.volume.Value - 5
                 end
                 if keybindchange then
                     keybindchange = false
@@ -693,6 +783,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                     if key.KeyCode == Enum.KeyCode.Backspace then
                         pause = nil
                         script.Parent.Keybinds.Features.pauseresume.keybindbutton.Text = ""
+                        saveKey(1,'')
                     end
                 end
                 if keybindchange2 then
@@ -705,6 +796,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                     if key.KeyCode == Enum.KeyCode.Backspace then
                         skip = nil
                         script.Parent.Keybinds.Features.skip.keybindbutton.Text = ""
+                        saveKey(2,'')
                     end
                 end
                 if keybindchange3 then
@@ -717,6 +809,33 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                     if key.KeyCode == Enum.KeyCode.Backspace then
                         previous = nil
                         script.Parent.Keybinds.Features.previous.keybindbutton.Text = ""
+                        saveKey(3,'')
+                    end
+                end
+                if keybindchange4 then
+                    keybindchange4 = false
+                    volup = z
+                    local textcool = string.find(tostring(z), "UserInputType") and 20 or 14
+                    script.Parent.Keybinds.Features.volumeup.keybindbutton.Text = string.sub(tostring(z), textcool)
+                    print('SAVING: '..string.sub(tostring(z), textcool)..' TO KEY 4')
+                    saveKey(4,string.sub(tostring(z), textcool))
+                    if key.KeyCode == Enum.KeyCode.Backspace then
+                        volup = nil
+                        script.Parent.Keybinds.Features.volumeup.keybindbutton.Text = ""
+                        saveKey(4,'')
+                    end
+                end
+                if keybindchange5 then
+                    keybindchange5 = false
+                    voldown = z
+                    local textcool = string.find(tostring(z), "UserInputType") and 20 or 14
+                    script.Parent.Keybinds.Features.volumedown.keybindbutton.Text = string.sub(tostring(z), textcool)
+                    print('SAVING: '..string.sub(tostring(z), textcool)..' TO KEY 5')
+                    saveKey(5,string.sub(tostring(z), textcool))
+                    if key.KeyCode == Enum.KeyCode.Backspace then
+                        voldown = nil
+                        script.Parent.Keybinds.Features.volumedown.keybindbutton.Text = ""
+                        saveKey(5,'')
                     end
                 end
             end
@@ -740,6 +859,18 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
             keybindchange3 = true
         end
     )
+
+    script.Parent.Keybinds.Features.volumeup.keybindbutton.MouseButton1Click:Connect(
+        function()
+            keybindchange4 = true
+        end
+    )
+
+    script.Parent.Keybinds.Features.volumedown.keybindbutton.MouseButton1Click:Connect(
+        function()
+            keybindchange5 = true
+        end
+    )
     Background.Visible = true
     Spotify.error.Visible = true
     Background.back.playing.Text = "   NULL"
@@ -751,15 +882,12 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
         pcall(
             function()
                 if _G.TOKEN ~= "" then
-                  print('sexxy')
                     local comply2, returns =
                         pcall(spotify, "https://api.spotify.com/v1/me/player/currently-playing", "GET", _G.TOKEN)
                     if comply2 then
                         local currentsec = math.floor(returns.current / 1000)
                         local maximumsec = math.floor(returns.maximum / 1000)
                         if returns==nil then print('ITS FUCKING NIL') end
-                        print(game.HttpService:JSONEncode(returns))
-                        print('sexxy back')
                         Background.back.playing.Text = "   " .. returns.title
                         Background.back.artist.Text = "   " .. returns.artist
                         Background.back.time.Text = "   " .. convertToHMS(currentsec)
@@ -852,6 +980,13 @@ local function YKZJVV_fake_script() -- volumeslider.LocalScript
     )
     cfgValue.Value = 50
 
+    game:GetService('UserInputService').InputBegan:Connect(function(input, p)
+        if p then return end
+        if input.KeyCode == Enum.KeyCode.KeypadEight then
+          
+        end
+    end)
+    
     local s, event =
         pcall(
         function()
