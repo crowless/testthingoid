@@ -42,7 +42,7 @@ local error = Instance.new("TextLabel")
 --Properties:
 local function readyFile() 
   if not isfile('Spotify-Config.txt') then
-    local b = { k1 = '', k2 = '', k3 = '' }
+    local b = { k1 = 'NOT SET', k2 = 'NOT SET', k3 = 'NOT SET' }
     local a = game.HttpService:JSONEncode(b)
     writefile('Spotify-Config.txt',a)
   end
@@ -628,9 +628,27 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     local keybindchange = false
     local keybindchange2 = false
     local keybindchange3 = false
-    local pause = Enum.KeyCode[getConfig().k1]
-    local skip = Enum.KeyCode[getConfig().k2]
-    local previous = Enum.KeyCode[getConfig().k3]
+    local pause
+    local skip
+    local previous
+    if getConfig().k1 ~= 'NOT SET' then
+        pause = Enum.KeyCode[getConfig().k1]
+        print(pause)
+      else
+        print('ITS : "'..getConfig().k1..'"')
+    end
+    if getConfig().k2 ~= 'NOT SET' then
+        skip = Enum.KeyCode[getConfig().k2]
+        print(skip)
+      else
+        print('ITS : "'..getConfig().k1..'"')
+    end
+    if getConfig().k3 ~= 'NOT SET' then
+        previous = Enum.KeyCode[getConfig().k3]
+        print(previous)
+      else
+        print('ITS : "'..getConfig().k1..'"')
+    end
     local UserInputService = game:GetService("UserInputService")
     UserInputService.InputBegan:connect(
         function(key, processed)
