@@ -553,7 +553,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
         end
         if lastVol ~= script.Parent.Spotify.Background.back.volumeslider.volume.Value then
           lastVol = script.Parent.Spotify.Background.back.volumeslider.volume.Value
-          save
+          saveVol(lastVol)
         end
       end
     end)
