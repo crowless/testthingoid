@@ -47,7 +47,7 @@ local error = Instance.new("TextLabel")
 --Properties:
 local function readyFile() 
   if not isfile('Spotify-Config.txt') then
-    local b = { k1 = 'NOT SET', k2 = 'NOT SET', k3 = 'NOT SET', vup = 'NOT SET', vdown = 'NOT SET', posX = 0, posY = 0, token = _G.TOKEN}
+    local b = { k1 = 'NOT SET', k2 = 'NOT SET', k3 = 'NOT SET', vup = 'NOT SET', vdown = 'NOT SET', vol = 50, posX = 0, posY = 0, token = _G.TOKEN}
     local a = game.HttpService:JSONEncode(b)
     writefile('Spotify-Config.txt',a)
   end
@@ -125,6 +125,12 @@ local function savePos(pos)
     a.posY = y
 
     updateFile(a)
+end
+
+local function saveVol(vol)
+  local a = getConfig()
+  a.vol = vol
+  updateFile(a)
 end
 Spotify.Name = "Spotify"
 Spotify.Parent = game.CoreGui
@@ -537,12 +543,17 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     local script = Instance.new("LocalScript", Spotify)
 
     local lastPos = UDim2.new()
+    local lastVol = script.Parent.Spotify.Background.back.volumeslider.volume.Value
 
     spawn(function() 
       while wait(.2) do
         if Spotify_2.Position ~= lastPos then
           lastPos = Spotify_2.Position
           savePos(Spotify_2.Position)
+        end
+        if lastVol ~= script.Parent.Spotify.Background.back.volumeslider.volume.Value then
+          lastVol = script.Parent.Spotify.Background.back.volumeslider.volume.Value
+          save
         end
       end
     end)
@@ -978,7 +989,7 @@ local function YKZJVV_fake_script() -- volumeslider.LocalScript
             end
         end
     )
-    cfgValue.Value = 50
+    cfgValue.Value = getConfig().vol
 
     game:GetService('UserInputService').InputBegan:Connect(function(input, p)
         if p then return end
