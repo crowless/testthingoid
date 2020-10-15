@@ -541,11 +541,10 @@ error.TextWrapped = true
 
 local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     local script = Instance.new("LocalScript", Spotify)
-
-    local lastPos = UDim2.new()
-    local lastVol = script.Parent.Spotify.Background.back.volumeslider.volume.Value
-
-    spawn(function() 
+    
+    spawn(function()
+      local lastPos = UDim2.new()
+      local lastVol = script.Parent.Spotify.Background.back.volumeslider:WaitForChild('volume').Value 
       while wait(.2) do
         if Spotify_2.Position ~= lastPos then
           lastPos = Spotify_2.Position
@@ -553,7 +552,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
         end
         if lastVol ~= script.Parent.Spotify.Background.back.volumeslider.volume.Value then
           lastVol = script.Parent.Spotify.Background.back.volumeslider.volume.Value
-          saveVol(lastVol)
+          saveVol(script.Parent.Spotify.Background.back.volumeslider.volume.Value)
         end
       end
     end)
@@ -990,13 +989,6 @@ local function YKZJVV_fake_script() -- volumeslider.LocalScript
         end
     )
     cfgValue.Value = getConfig().vol
-
-    game:GetService('UserInputService').InputBegan:Connect(function(input, p)
-        if p then return end
-        if input.KeyCode == Enum.KeyCode.KeypadEight then
-          
-        end
-    end)
     
     local s, event =
         pcall(
