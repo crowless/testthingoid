@@ -778,10 +778,8 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                 elseif z == previous then
                     pcall(spotify, "https://api.spotify.com/v1/me/player/previous", "POST", _G.TOKEN)
                 elseif z == volup then
-                    print('sex')
                     script.Parent.Spotify.Background.back.volumeslider:WaitForChild('volume').Value = script.Parent.Spotify.Background.back.volumeslider:WaitForChild('volume').Value + 5
                 elseif z == voldown then
-                    print('sex2')
                     script.Parent.Spotify.Background.back.volumeslider:WaitForChild('volume').Value = script.Parent.Spotify.Background.back.volumeslider:WaitForChild('volume').Value - 5
                 end
                 if keybindchange then
@@ -889,7 +887,13 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     Background.back.time.Text = "   NULL"
     Background.back.time2.Text = "NULL   "
     Background.back.progressbar.progresssize.Size = UDim2.new(0, 0, 1, 0)
-    _G.TOKEN = getConfig().token
+    if string.len(getConfig().token)~=0 then
+        _G.TOKEN = getConfig().token
+        print('CONFIG TOKEN: '..getConfig().token)
+        print('config is not nil: '.._G.TOKEN..' LENGTH: '..string.len(_G.TOKEN))
+    else
+      print('nope, token is: '.._G.TOKEN)
+    end
     while wait(0.25) do
         pcall(
             function()
@@ -933,6 +937,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                             _G.TOKEN
                         )
                     else
+                        print('COMPLY FALSE')
                         Background.back.playing.Text = "   NULL"
                         Background.back.artist.Text = "   NULL"
                         Background.back.time.Text = "   NULL"
@@ -956,6 +961,8 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                           refreshToken()
                         -- end
                     end
+                else
+                  print('WTF? TOKEN IS: '.._G.TOKEN)
                 end
             end
         )
