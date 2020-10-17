@@ -47,13 +47,24 @@ local error = Instance.new("TextLabel")
 --Properties:
 local function readyFile() 
   if not isfile('Spotify-Config.txt') then
-    local b = { k1 = 'NOT SET', k2 = 'NOT SET', k3 = 'NOT SET', vup = 'NOT SET', vdown = 'NOT SET', vol = 50, posX = 0, posY = 0, token = _G.TOKEN}
+    local b = { k1 = 'NOT SET',
+    k2 = 'NOT SET',
+    k3 = 'NOT SET',
+    vup = 'NOT SET',
+    vdown = 'NOT SET',
+    vol = 50,
+    posX = 0,
+    posY = 0,
+    token = _G.TOKEN,
+    on = true
+    }
     local a = game.HttpService:JSONEncode(b)
     writefile('Spotify-Config.txt',a)
   end
 end
 
 readyFile()
+
 local function getConfig()
   if isfile('Spotify-Config.txt') then
     local config = readfile('Spotify-Config.txt')
@@ -557,16 +568,33 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
         end
       end
     end)
-    local on = true
+    if getConfig().on == nil then
+      local aa = getConfig()
+      aa.on = true
+      updateFile(aa)
+    end
+    local on = getConfig().on
+    if on == false then
+      Spotify.Enabled = false
+    else
+      Spotify.Enabled = true
+    end
+    
     game:GetService('UserInputService').InputBegan:Connect(function(input, p)
         if p then return end
         if input.KeyCode == Enum.KeyCode.RightShift then
           print(_G.TOKEN)
           if on == true then
             on = false
+            local a = getConfig()
+            a.on = false
+            updateFile(a)
             Spotify.Enabled = false
           else
             on = true
+            local a = getConfig()
+            a.on = true
+            updateFile(a)
             Spotify.Enabled = true
           end
         end
@@ -889,8 +917,6 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     Background.back.progressbar.progresssize.Size = UDim2.new(0, 0, 1, 0)
     if string.len(getConfig().token)~=0 then
         _G.TOKEN = getConfig().token
-        print('CONFIG TOKEN: '..getConfig().token)
-        print('config is not nil: '.._G.TOKEN..' LENGTH: '..string.len(_G.TOKEN))
     else
       print('nope, token is: '.._G.TOKEN)
     end
