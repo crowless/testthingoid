@@ -66,6 +66,7 @@ local function updateToken()
   if isfile('Spotify-Config.txt') then
     local config = getConfig()
     config.token = _G.TOKEN
+    print('TOKEN UPDATED TO: '.._G.TOKEN)
     local a = game.HttpService:JSONEncode(config)
     writefile('Spotify-Config.txt',a)
   end
@@ -86,6 +87,7 @@ local function refreshToken()
   print('PASSED')
   print('TOKEN IS SET TO: '..a.Body)
   _G.TOKEN = a.Body
+  updateToken()
   Background.Visible = true
   Spotify.error.Visible = true
   Background.back.playing.Text = "   NULL"
@@ -93,7 +95,6 @@ local function refreshToken()
   Background.back.time.Text = "   NULL"
   Background.back.time2.Text = "NULL   "
   Background.back.progressbar.progresssize.Size = UDim2.new(0,0,1,0)
-  updateToken()
 end
 
 local function saveKey(num,key)
@@ -556,8 +557,6 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
         end
       end
     end)
-
-    _G.TOKEN = getConfig().token
     local on = true
     game:GetService('UserInputService').InputBegan:Connect(function(input, p)
         if p then return end
@@ -890,6 +889,7 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
     Background.back.time.Text = "   NULL"
     Background.back.time2.Text = "NULL   "
     Background.back.progressbar.progresssize.Size = UDim2.new(0, 0, 1, 0)
+    _G.TOKEN = getConfig().token
     while wait(0.25) do
         pcall(
             function()
@@ -951,7 +951,10 @@ local function PLHTDN_fake_script() -- Spotify.SpotifyHandler
                             1
                         )
                         Spotify.error.Text = "Error: The Spotify API returned an error, refreshing token."
-                        refreshToken()
+                        -- if _G.TOKEN==nil or _G.TOKEN=='' then
+                          print('THE CURRENT: '.._G.TOKEN)
+                          refreshToken()
+                        -- end
                     end
                 end
             end
